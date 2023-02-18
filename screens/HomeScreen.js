@@ -174,13 +174,13 @@ const HomeScreen = () => {
 					{/* items */}
 					<FeaturedRow
 						title="Last Movies"
-						description="hola"
+						description="Only in PopCorn you can find the latest movies 🥳"
 						data={generalM}
 						myRef_="LM"
 					/>
 					<FeaturedRow
 						title="Best Rating"
-						description="hola"
+						description="Movies with the highest rating, only on PopCorn 🥇"
 						data={ratingM}
 						myRef_="BR"
 					/>
