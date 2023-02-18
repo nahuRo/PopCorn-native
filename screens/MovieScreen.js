@@ -9,7 +9,7 @@ import {
 	Pressable,
 } from "react-native";
 import { useLayoutEffect, useState } from "react";
-import { useNavigation, useRoute, validatePathConfig } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
 	StarIcon,
@@ -133,10 +133,6 @@ const MovieScreen = () => {
 						</View>
 					</View>
 				)}
-
-				<View className="pt-3">
-					<Text className="text-white text-lg">Trailer</Text>
-				</View>
 			</ScrollView>
 		</View>
 	);

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ScrollView } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,7 +9,10 @@ import MiniItemsDetail from "../components/MiniItemsDetail";
 import { categories } from "../utils/categories";
 
 const AllMoviesScreen = () => {
+	const [page, setPage] = useState(1);
 	const [moviesList, setMoviesList] = useState([]);
+	const [moviesPages, setMoviesPages] = useState(0);
+
 	const navigation = useNavigation();
 
 	const {
@@ -20,25 +23,42 @@ const AllMoviesScreen = () => {
 		navigation.setOptions({
 			headerShown: false,
 		});
-	}, []);
+	}, [page]);
 
 	useEffect(() => {
-		fetchApi(myRef_);
-	}, []);
+		fetchApi(myRef_, page);
+	}, [page]);
 
-	const fetchApi = async (myRef_) => {
+	const handleEnd = () => {
+		console.log({ page, moviesPages });
+
+		if (page === moviesPages) {
+			return console.log("no hay mas ");
+		}
+		setPage(page + 1);
+	};
+
+	const fetchApi = async (myRef_, currentPage) => {
 		if (myRef_ === "BR") {
-			const { data } = await bestIMSDRating(9, 24);
-			setMoviesList(data.movies);
+			const { data } = await bestIMSDRating(9, 24, currentPage);
+			setMoviesPages(Math.round(data.movie_count / data.limit));
+
+			setMoviesList([...moviesList, ...data.movies]);
 		} else if (myRef_ === "LM") {
-			const { data } = await getMovies("", 24);
-			setMoviesList(data.movies);
+			const { data } = await getMovies("", 24, currentPage);
+			setMoviesPages(Math.round(data.movie_count / data.limit));
+
+			setMoviesList([...moviesList, ...data.movies]);
 		} else if (categories.includes(myRef_)) {
-			const { data } = await getMovies("", 24, "", myRef_);
-			setMoviesList(data.movies);
+			const { data } = await getMovies("", 24, currentPage, myRef_);
+			setMoviesPages(Math.round(data.movie_count / data.limit));
+
+			setMoviesList([...moviesList, ...data.movies]);
 		} else {
-			const { data } = await getMovies(myRef_, 24);
-			setMoviesList(data.movies);
+			const { data } = await getMovies(myRef_, 24, currentPage);
+			setMoviesPages(Math.round(data.movie_count / data.limit));
+
+			setMoviesList([...moviesList, ...data.movies]);
 		}
 	};
 
@@ -69,6 +89,9 @@ const AllMoviesScreen = () => {
 					</View>
 				)}
 				keyExtractor={(item) => item.id}
+				onEndReachedThreshold={0.5}
+				onEndReached={handleEnd}
+				// ListFooterComponent={() => <Text>soy ultimo</Text>}
 			/>
 		</SafeAreaView>
 	);

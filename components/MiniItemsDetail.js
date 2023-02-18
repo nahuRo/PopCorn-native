@@ -36,15 +36,19 @@ const MiniItemsDetail = ({ title, genres, rating, medium_cover_image, imdb_code 
 				}}
 			/>
 			<View className="px-1">
-				<Text className="font-bold text-sm pt-1">
-					{title.length > 19 ? `${title.slice(0, 19)} ...` : title}
-				</Text>
+				{title && (
+					<Text className="font-bold text-sm pt-1">
+						{title.length > 19 ? `${title.slice(0, 19)} ...` : title}
+					</Text>
+				)}
 				<View className="flex-row items-center space-x-1">
 					<StarIcon size={16} color="#00CCBB" opacity={0.5} />
-					<Text className="text-xs text-slate-500">
-						<Text className="text-xs text-red-200">{rating}</Text> &bull;{" "}
-						{genres[0]}/{genres[1]}
-					</Text>
+					{genres && (
+						<Text className="text-xs text-slate-500">
+							<Text className="text-xs text-red-200">{rating}</Text> &bull;{" "}
+							{genres[0]}/{genres[1]}
+						</Text>
+					)}
 				</View>
 			</View>
 		</TouchableOpacity>
